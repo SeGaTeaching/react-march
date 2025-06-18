@@ -1,26 +1,47 @@
-import './App.css'
-import AlienCard from './components/AlienCard'
-import FrogImg from './assets/frosch2.png'
-import CatImg from './assets/cat.png'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import './App.css';
+import IntroPage from './components/intro/IntroPage';
+import State from './components/state/State';
+
+function Header() {
+  return (
+    <nav>
+        <ul>
+          <li><Link to="/">Einführung</Link></li>
+          <li><Link to="/counter">Zähler (useState)</Link></li>
+          <li><Link to="/products">API: Produkte</Link></li>
+          <li><Link to="/search">Live-Suche</Link></li>
+        </ul>
+      </nav>
+  )
+}
+
+function Footer() {
+  return (
+    <footer>
+      © 2025 React - BBQ Further Education
+    </footer>
+  )
+}
 
 function App() {
 
   return (
-    <>
-      <h1>Willkommen im Alien Zoo</h1>
-      <AlienCard 
-        species="Glibberfrosch"
-        planet="Quasar-9"
-        imageUrl={FrogImg}
-      />
-      <AlienCard
-        species="Kometenkatze"
-        planet="Andromeda-2"
-        imageUrl={CatImg}
-      />
-    </>
-  )
+    <div className="App">
+      <Router>
+        <Header />
 
+        <main>
+          <Routes>
+            <Route path="/" element={<IntroPage />} />
+            <Route path="/counter" element={<State />} />
+          </Routes>
+        </main>
+
+        <Footer />
+      </Router>
+    </div>
+  )
 }
 
 export default App

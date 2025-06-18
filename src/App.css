@@ -1,11 +1,59 @@
-
+/* Globaler Reset und Grundlayout */
 body {
-  display: grid;
-  place-content: center;
-  font-family: sans-serif;
-  background-color: #f0f8ff;
-  padding: 2rem;
-  height: 100vh;
   margin: 0;
-  box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header */
+nav {
+  background-color: #004080;
+  padding: 1rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+nav li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav li a:hover {
+  text-decoration: underline;
+}
+
+/* Hauptinhalt */
+main {
+  flex-grow: 1;
+  padding: 2rem;
+  min-width: 900px;
+  margin: 2rem auto;
+  background-color: white;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+}
+
+/* Footer */
+footer {
+  background-color: #f1f1f1;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: auto;
 }

@@ -16,27 +16,90 @@ body {
 /* Header */
 nav {
   background-color: #004080;
-  padding: 1rem;
+  padding: 1rem 2rem;
 }
 
+/* Hauptmenü */
 nav ul {
   list-style: none;
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem;
   margin: 0;
   padding: 0;
+  align-items: center;
+  justify-content: center;
 }
 
-nav li a {
+nav li {
+  position: relative;
+}
+
+nav li a,
+.submenu-toggle {
   color: white;
   text-decoration: none;
   font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.3rem 0.5rem;
 }
 
-nav li a:hover {
+nav li a:hover,
+.submenu-toggle:hover {
   text-decoration: underline;
 }
 
+/* Submenu */
+ul.submenu {
+  position: absolute;
+  top: 150%;
+  left: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  background-color: #0059b3;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  justify-content: flex-start;
+  align-items: stretch;
+  text-align: center;
+  gap: 0.25rem;
+  width: 15em;
+}
+
+.submenu.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.submenu li:not(:last-child) a {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.submenu li a {
+  padding: 0.8rem 1rem;
+  color: #fff;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  display: block;
+  transition: background-color 0.2s ease;
+  border-radius: 10px;
+
+}
+
+.submenu li a:hover {
+  background-color: #0072d6;
+}
 /* Hauptinhalt */
 main {
   flex-grow: 1;

@@ -6,9 +6,14 @@ import SearchBar from "./components/state/SearchBar";
 import Counter from "./components/state/Counter";
 import Accordion from "./components/state/Accordion";
 import Colors from "./components/state/Colors";
+import ColorChoice from "./components/effect/ColorChoice";
+import AutoCounter from "./components/effect/AutoCounter";
+import ResizeWindow from "./components/effect/ResizeWindow";
+import Crud from "./components/crud/Crud";
 
 function Header() {
   const [showExamples, setShowExamples] = useState(false);
+  const [effectExamples, setEffectExamples] = useState(false);
 
   return (
     <nav>
@@ -54,8 +59,39 @@ function Header() {
           )}
         </li>
 
+        <li className="dropdown">
+          <a
+            className={`submenu-toggle ${effectExamples ? "open" : ""}`}
+            onClick={() => setEffectExamples((prev) => !prev)}
+          >
+            'useEffect' Beispiele ▾
+          </a>
+
+          {effectExamples && (
+            <ul
+              className={`submenu ${effectExamples ? "open" : ""}`}
+              onMouseLeave={() => setEffectExamples(false)}
+            >
+              <li>
+                <Link to="/color-choice" onClick={() => setEffectExamples(false)}>
+                  Farbauswahl
+                </Link>
+              </li>
+              <li>
+                <Link to="/auto-counter" onClick={() => setEffectExamples(false)}>
+                  Auto Counter
+                </Link>
+              </li>
+              <li>
+                <Link to="/resize-window" onClick={() => setEffectExamples(false)}>
+                  Fenstergröße
+                </Link>
+              </li>
+            </ul>
+          )}
+        </li>
         <li>
-          <Link to="/about">About</Link>
+          <Link to="/i-am-crud">CRUD Operationen</Link>
         </li>
       </ul>
     </nav>
@@ -75,10 +111,19 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<IntroPage />} />
+
+            {/* useState Examples Components */}
             <Route path="/counter" element={<Counter />} />
             <Route path="/accordion" element={<Accordion />} />
             <Route path="/searchbar" element={<SearchBar />} />
             <Route path="/colors" element={<Colors />} />
+
+            {/* useEffect Examples Components */}
+            <Route path="/color-choice" element={<ColorChoice />} />
+            <Route path="/auto-counter" element={<AutoCounter />} />
+            <Route path="/resize-window" element={<ResizeWindow />} />
+            <Route path="/i-am-crud" element={<Crud />} />
+
           </Routes>
         </main>
 

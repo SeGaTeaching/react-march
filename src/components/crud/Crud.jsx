@@ -1,55 +1,142 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
+
+const API_URL = "http://127.0.0.1:8000/api/notes/";
 
 function Crud() {
   const [notes, setNotes] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [form, setForm] = useState({ title: '', content: '' });
+  const [editingId, setEditingId] = useState(null);
 
-  async function fetchNotes() {
-    const API_URL = "http://127.0.0.1:8000/api/notes";
-
-    try {
-      const response = await fetch(API_URL);
-      if (!response.ok) {
-        throw new Error("Daten konnten nicht geladen werden.");
-      }
-      const data = await response.json();
-      setNotes(data);
-    } catch (e) {
-      setError(e.message);
-    }
-  }
   useEffect(() => {
-    try {
-      fetchNotes();
-    } finally {
-      setIsLoading(false);
-    }
+    fetchNotes();
   }, []);
 
-  if (isLoading) {
-    return <p>Lade Produkte...</p>;
+  const fetchNotes = async () => {
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      data.reverse();
+      setNotes(data);
+    } catch (err) {
+      console.error("Fehler beim Laden der Notizen:", err);
+    }
+  };
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const method = editingId ? 'PUT' : 'POST';
+    const url = editingId ? `${API_URL}${editingId}/` : API_URL
+    try {
+        const res = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(form)
+        })
+
+        // Einfach und schnell aber ineffizient
+        //---------------------------------------
+        // if (res.ok) {
+        //     fetchNotes()
+        // }
+
+        // Besser, da ressourcen-schonender
+        //-----------------------------------
+        const data = await res.json();
+        if (res.ok) {
+            if (editingId) {
+                setNotes(prev => prev.map((note) => {
+                    return note.id === data.id ? data : note;
+                }))
+            } else {
+                setNotes(prev => [data, ...prev]);
+                
+            }
+            
+        } else {
+            console.error('Fehlerhafte API-Antwort', data);
+        }
+
+        // Formular zurücksetzen
+        setForm({ title: '', content: '' });
+        setEditingId(null);
+
+
+
+    } catch (err) {
+        console.error('Fehler beim Speicher:', err);
+    }
+
   }
 
-  if (error) {
-    return <p>Fehler: {error}</p>;
+  async function handleDelete(id) {
+    try {
+        const res = await fetch(`${API_URL}${id}/`, {
+            method: 'DELETE'
+        })
+
+        if (res.ok) {
+            setNotes(prev => prev.filter(note => {
+                return note.id !== id;
+            }))
+        } else {
+            console.error('Löschen fehlgeschlagen');
+        }
+    } catch (err) {
+        console.error('Fehler beim Löschen:', err);
+    }
   }
 
+  function handleEdit(note) {
+    setForm({ title: note.title, content: note.content });
+    setEditingId(() => note.id)
+  }
+
+  function handleChange(e) {
+    setForm(prev => ({...prev, [e.target.name]: e.target.value}));
+  }
+  
   return (
-    <div>
-      <h2>Meine Notizen</h2>
-      <ul>
-        {notes.map((note) => (
-          <li key={note.id}>
+    <div style={{ maxWidth: 600, margin: '2rem auto' }}>
+        <h1>Notizen ({notes.length})</h1>
+
+        <form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
+            <input
+            name="title"
+            value={form.title}
+            onChange={handleChange}
+            placeholder="Titel"
+            
+            style={{ display: 'block', width: '100%', marginBottom: '1rem' }}
+            />
+            <textarea
+            name="content"
+            value={form.content}
+            onChange={handleChange}
+            placeholder="Inhalt"
+            
+            style={{ display: 'block', width: '100%', marginBottom: '1rem' }}
+            />
+            <button type="submit">
+            {editingId ? 'Aktualisieren' : 'Erstellen'}
+            </button>
+        </form>
+
+        <p>Selected Note ID: {editingId || 'none'}</p>
+
+        <ul>
+        {notes.map(note => (
+          <li key={note.id} style={{ marginBottom: '1.5rem' }}>
             <strong>{note.title}</strong>
             <p>{note.content}</p>
-            <p>{note.created_at}</p>
+            <button onClick={() => handleEdit(note)}>Bearbeiten</button>
+            <button onClick={() => handleDelete(note.id)} style={{ marginLeft: '0.5rem' }}>Löschen</button>
           </li>
         ))}
       </ul>
-      {/* <button onClick={fetchNotes}>Daten laden</button> */}
     </div>
-  );
+  )
 }
 
-export default Crud;
+export default Crud

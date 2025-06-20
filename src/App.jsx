@@ -9,6 +9,7 @@ import Colors from "./components/state/Colors";
 import ColorChoice from "./components/effect/ColorChoice";
 import AutoCounter from "./components/effect/AutoCounter";
 import ResizeWindow from "./components/effect/ResizeWindow";
+import CrudRead from "./components/crud/CrudRead";
 import Crud from "./components/crud/Crud";
 
 function Header() {
@@ -91,7 +92,10 @@ function Header() {
           )}
         </li>
         <li>
-          <Link to="/i-am-crud">CRUD Operationen</Link>
+          <Link to="/i-am-crud">CRUD - R</Link>
+        </li>
+        <li>
+          <Link to="/i-am-crud-advanced">CRUD - CUD</Link>
         </li>
       </ul>
     </nav>
@@ -122,7 +126,10 @@ function App() {
             <Route path="/color-choice" element={<ColorChoice />} />
             <Route path="/auto-counter" element={<AutoCounter />} />
             <Route path="/resize-window" element={<ResizeWindow />} />
-            <Route path="/i-am-crud" element={<Crud />} />
+
+            {/* CRUD Examples Components */}
+            <Route path="/i-am-crud" element={<CrudRead />} />
+            <Route path="/i-am-crud-advanced" element={<Crud />} />
 
           </Routes>
         </main>
